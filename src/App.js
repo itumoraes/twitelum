@@ -11,7 +11,32 @@ class App extends Component {
 
     this.state = {
       novoTweet: '',
+      tweets: [],
     }
+  }
+
+  adicionaTweet = (infosDoEvento) => {
+    infosDoEvento.preventDefault()
+
+    if (this.state.novoTweet.length > 0) {
+      this.setState({
+        tweets: [this.state.novoTweet, ...this.state.tweets],
+        novoTweet: '',
+      })
+    }
+  }
+
+  mapTweets = () => {
+    const { tweets } = this.state
+    
+    if (tweets.length) {
+      return tweets.map((tweetInfo, index) => <Tweet
+                                                key={ tweetInfo + index }
+                                                texto={ tweetInfo }
+                                              />)
+    }
+
+    return <p>Opa, você não tem tweets. Crie um novo ao lado :)</p>
   }
 
   render() {
@@ -21,7 +46,7 @@ class App extends Component {
         <div className="container">
           <Dashboard>
             <Widget>
-              <form className="novoTweet">
+              <form className="novoTweet" onSubmit={ this.adicionaTweet }>
                 <div className="novoTweet__editorArea">
                   <span className={
                     `novoTweet__status
@@ -56,7 +81,7 @@ class App extends Component {
           <Dashboard posicao="centro">
             <Widget>
               <div className="tweetsArea">
-                <Tweet />
+                { this.mapTweets() }
               </div>
             </Widget>
           </Dashboard>
