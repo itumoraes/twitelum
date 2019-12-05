@@ -11,9 +11,18 @@ import './assets/css/iconHeart.css'
 import './assets/css/novoTweet.css'
 // import './index.css';
 
-
-import App from './App';
+// import HomePage from './pages/HomePage';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// Roteamento
+import { BrowserRouter } from 'react-router-dom'
+import Roteamento from './routes'
+
+ReactDOM.render(
+  <BrowserRouter>
+    <Roteamento />
+  </BrowserRouter>,
+  document.getElementById('root')
+);
+
 registerServiceWorker();
