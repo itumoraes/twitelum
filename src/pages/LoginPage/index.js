@@ -8,10 +8,43 @@ import './loginPage.css'
 class LoginPage extends Component {
   static contextType = NotificacaoContext;
 
-  fazerLogin = (event) => {
-    event.preventDefault()
+  fazerLogin = infosDoEvento => {
+    infosDoEvento.preventDefault()
 
-    this.context.setMsg("Bem vindo ao Twitelum, login foi um sucesso!");
+    const dadosDoLogin = {
+      login: this.refs.inputLogin.value,
+      senha: this.refs.inputSenha.value,
+    }
+
+    fetch('https://twitelum-api.herokuapp.com/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dadosDoLogin)
+    })
+    .then(async responseDoServer => {
+      if (!responseDoServer.ok) {
+        const respostaDeErroDoServidor = await responseDoServer.json()
+        const errorObj = Error(respostaDeErroDoServidor.message)
+  
+        errorObj.status = responseDoServer.status
+        throw errorObj
+      }
+
+      return responseDoServer.json()
+    })
+    .then(dadosDoServidorEmObj => {
+      const { token } = dadosDoServidorEmObj
+      if (token) {
+        localStorage.setItem('TOKEN', token)
+        this.context.setMsg("Bem vindo ao Twitelum, login foi um sucesso!");
+        this.props.history.push('/')
+      }
+    })
+    .catch(err => {
+      console.error(`[Erro ${err.status}]`, err.message)
+    })
   }
   
   render() {
@@ -25,11 +58,11 @@ class LoginPage extends Component {
               <form className="loginPage__form" action="/" onSubmit={ this.fazerLogin }>
                 <div className="loginPage__inputWrap">
                   <label className="loginPage__label" htmlFor="login">Login</label> 
-                  <input className="loginPage__input" type="text" id="login" name="login"/>
+                  <input ref="inputLogin" className="loginPage__input" type="text" id="login" name="login"/>
                 </div>
                 <div className="loginPage__inputWrap">
                   <label className="loginPage__label" htmlFor="senha">Senha</label> 
-                  <input className="loginPage__input" type="password" id="senha" name="senha"/>
+                  <input ref="inputSenha" className="loginPage__input" type="password" id="senha" name="senha"/>
                 </div>
                 {/* <div className="loginPage__errorBox">
                     Mensagem de erro!
