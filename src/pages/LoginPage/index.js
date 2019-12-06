@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import Cabecalho from '../../components/Cabecalho'
 import Widget from '../../components/Widget'
 import { NotificacaoContext } from '../../context/NotificacaoContext'
+import { LoginService } from '../../services/LoginService'
 
 import './loginPage.css'
 
@@ -11,36 +12,15 @@ class LoginPage extends Component {
   fazerLogin = infosDoEvento => {
     infosDoEvento.preventDefault()
 
-    const dadosDoLogin = {
+    const dadosDeLogin = {
       login: this.refs.inputLogin.value,
       senha: this.refs.inputSenha.value,
     }
 
-    fetch('https://twitelum-api.herokuapp.com/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dadosDoLogin)
-    })
-    .then(async responseDoServer => {
-      if (!responseDoServer.ok) {
-        const respostaDeErroDoServidor = await responseDoServer.json()
-        const errorObj = Error(respostaDeErroDoServidor.message)
-  
-        errorObj.status = responseDoServer.status
-        throw errorObj
-      }
-
-      return responseDoServer.json()
-    })
-    .then(dadosDoServidorEmObj => {
-      const { token } = dadosDoServidorEmObj
-      if (token) {
-        localStorage.setItem('TOKEN', token)
-        this.context.setMsg("Bem vindo ao Twitelum, login foi um sucesso!");
-        this.props.history.push('/')
-      }
+    LoginService.logar(dadosDeLogin)
+    .then(() => {
+      this.context.setMsg("Bem vindo ao Twitelum, login foi um sucesso!");
+      this.props.history.push('/')
     })
     .catch(err => {
       console.error(`[Erro ${err.status}]`, err.message)
