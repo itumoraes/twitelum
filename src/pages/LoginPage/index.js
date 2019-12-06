@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import Cabecalho from '../../components/Cabecalho'
 import Widget from '../../components/Widget'
+import InputFormField from '../../components/InputFormField'
 import { NotificacaoContext } from '../../context/NotificacaoContext'
 import { LoginService } from '../../services/LoginService'
 
@@ -9,12 +10,40 @@ import './loginPage.css'
 class LoginPage extends Component {
   static contextType = NotificacaoContext;
 
+  state = {
+    values: {
+      inputLogin: '',
+      inputSenha: '',
+    },
+    errors: {},
+  }
+
+  formValidations = () => {
+    const { inputLogin, inputSenha } = this.state.values
+    const errors = {}
+
+    if (!inputLogin) errors.inputLogin = 'Esse campo é obrigatório'
+
+    if (!inputSenha) errors.inputSenha = 'Esse campo é obrigatório'
+
+    this.setState({ errors })
+  }
+
+  onFormFieldChange = ({ target }) => {
+    const { value, name } = target
+    const values = { ...this.state.values, [name]: value }
+
+    this.setState({ values }, () => {
+      this.formValidations()
+    })
+  }
+
   fazerLogin = infosDoEvento => {
     infosDoEvento.preventDefault()
 
     const dadosDeLogin = {
-      login: this.refs.inputLogin.value,
-      senha: this.refs.inputSenha.value,
+      login: this.state.values.inputLogin,
+      senha: this.state.values.inputSenha,
     }
 
     LoginService.logar(dadosDeLogin)
@@ -36,14 +65,20 @@ class LoginPage extends Component {
             <Widget>
               <h2 className="loginPage__title">Seja bem vindo!</h2>
               <form className="loginPage__form" action="/" onSubmit={ this.fazerLogin }>
-                <div className="loginPage__inputWrap">
-                  <label className="loginPage__label" htmlFor="login">Login</label> 
-                  <input ref="inputLogin" className="loginPage__input" type="text" id="login" name="login"/>
-                </div>
-                <div className="loginPage__inputWrap">
-                  <label className="loginPage__label" htmlFor="senha">Senha</label> 
-                  <input ref="inputSenha" className="loginPage__input" type="password" id="senha" name="senha"/>
-                </div>
+                <InputFormField
+                  id="inputLogin"
+                  label="Login: "
+                  onChange={this.onFormFieldChange}
+                  values={this.state.values}
+                  errors={this.state.errors}
+                />
+                <InputFormField
+                  id="inputSenha"
+                  label="Senha: "
+                  onChange={this.onFormFieldChange}
+                  values={this.state.values}
+                  errors={this.state.errors}
+                />
                 {/* <div className="loginPage__errorBox">
                     Mensagem de erro!
                 </div> */}
