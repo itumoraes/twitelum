@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from 'react'
+import Helmet from 'react-helmet'
+
 import Cabecalho from '../../components/Cabecalho'
 import Dashboard from '../../components/Dashboard'
 import Widget from '../../components/Widget'
@@ -64,6 +66,9 @@ class HomePage extends Component {
   render() {
     return (
       <Fragment>
+        <Helmet>
+          <title>Twitelum - ({`${this.state.tweets.length}`})</title>
+        </Helmet>
         <Cabecalho usuario="@omariosouto" />
         <div className="container">
           <Dashboard>
