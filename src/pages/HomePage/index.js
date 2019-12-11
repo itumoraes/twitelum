@@ -19,10 +19,23 @@ class HomePage extends Component {
     infosDoEvento.preventDefault()
 
     if (this.state.novoTweet.length > 0) {
-      this.setState({
-        tweets: [this.state.novoTweet, ...this.state.tweets],
-        novoTweet: '',
+      fetch(`https://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ conteudo: this.state.novoTweet })
       })
+      .then((respostaDoServer) => {
+        return respostaDoServer.json()
+      })
+      .then((tweetVindoDoServidor) => {
+        this.setState({
+          tweets: [tweetVindoDoServidor, ...this.state.tweets],
+          novoTweet: '',
+        })
+      })
+
     }
   }
 
@@ -31,8 +44,9 @@ class HomePage extends Component {
     
     if (tweets.length) {
       return tweets.map((tweetInfo, index) => <Tweet
-                                                key={ tweetInfo + index }
-                                                texto={ tweetInfo }
+                                                key={ tweetInfo.__id }
+                                                texto={ tweetInfo.conteudo }
+                                                usuario={ tweetInfo.usuario }
                                               />)
     }
 
