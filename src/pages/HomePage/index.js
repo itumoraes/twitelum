@@ -49,6 +49,20 @@ class HomePage extends Component {
     }
   }
 
+  removeTweet = (idTweetQueVaiSerRemovido) => {
+    fetch(`https://twitelum-api.herokuapp.com/tweets/${idTweetQueVaiSerRemovido}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
+      method: 'DELETE',
+    })
+    .then(data => data.json())
+    .then(response => {
+      const listaDeTweetsAtualizada = this.state.tweets.filter(tweet => tweet._id !== idTweetQueVaiSerRemovido)
+      
+      this.setState({
+        tweets: listaDeTweetsAtualizada,
+      })
+    })
+  }
+
   mapTweets = () => {
     const { tweets } = this.state
     
@@ -60,6 +74,8 @@ class HomePage extends Component {
                                                 usuario={ tweetInfo.usuario }
                                                 likeado={ tweetInfo.likeado }
                                                 totalLikes={ tweetInfo.totalLikes }
+                                                removivel={ tweetInfo.removivel }
+                                                removeHandler={ (event) => { this.removeTweet(tweetInfo._id) } }
                                               />)
     }
 

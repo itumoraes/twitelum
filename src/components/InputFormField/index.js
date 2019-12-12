@@ -1,6 +1,6 @@
 import React from 'react'
 
-const InputFormField = ({ id, label, errors, values, onChange, onBlur, touched, }) => {
+const InputFormField = ({ id, label, errors, values, onChange, onBlur, touched, type = 'text', }) => {
   const isTouched = Boolean(touched[id])
   const hasErrors = Boolean(errors[id])
 
@@ -11,7 +11,7 @@ const InputFormField = ({ id, label, errors, values, onChange, onBlur, touched, 
       </label> 
       <input
         className="loginPage__input"
-        type="text"
+        type={type}
         id={id}
         name={id}
         value={values[id]}

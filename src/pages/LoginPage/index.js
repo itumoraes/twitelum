@@ -77,6 +77,7 @@ class LoginPage extends Component {
                       values={values}
                       errors={errors}
                       touched={touched}
+                      type="password"
                     />
                     {/* <div className="loginPage__errorBox">
                         Mensagem de erro!
