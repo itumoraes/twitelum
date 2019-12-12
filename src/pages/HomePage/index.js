@@ -54,9 +54,12 @@ class HomePage extends Component {
     
     if (tweets.length) {
       return tweets.map((tweetInfo, index) => <Tweet
-                                                key={ tweetInfo.__id }
+                                                key={ tweetInfo._id }
+                                                id={ tweetInfo._id }
                                                 texto={ tweetInfo.conteudo }
                                                 usuario={ tweetInfo.usuario }
+                                                likeado={ tweetInfo.likeado }
+                                                totalLikes={ tweetInfo.totalLikes }
                                               />)
     }
 
