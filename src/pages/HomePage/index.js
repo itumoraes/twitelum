@@ -8,6 +8,8 @@ import TrendsArea from '../../components/TrendsArea'
 import Tweet from '../../components/Tweet'
 import { Modal } from '../../components/Modal'
 
+import ApiConfig from '../../ApiConfig'
+
 class HomePage extends Component {
   constructor() {
     super()
@@ -20,7 +22,7 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    fetch(`https://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
+    fetch(`${ApiConfig.url}/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
     .then(response => response.json())
     .then((tweets) => {
       this.setState({ tweets })
@@ -31,7 +33,7 @@ class HomePage extends Component {
     infosDoEvento.preventDefault()
 
     if (this.state.novoTweet.length > 0) {
-      fetch(`https://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
+      fetch(`${ApiConfig.url}/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +54,7 @@ class HomePage extends Component {
   }
 
   removeTweet = (idTweetQueVaiSerRemovido) => {
-    fetch(`https://twitelum-api.herokuapp.com/tweets/${idTweetQueVaiSerRemovido}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
+    fetch(`${ApiConfig.url}/tweets/${idTweetQueVaiSerRemovido}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
       method: 'DELETE',
     })
     .then(data => data.json())

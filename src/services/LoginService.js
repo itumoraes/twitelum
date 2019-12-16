@@ -1,6 +1,8 @@
+import ApiConfig from '../ApiConfig'
+
 export const LoginService = {
   logar({ login, senha }) {
-    return fetch('https://twitelum-api.herokuapp.com/login', {
+    return fetch(`${ApiConfig.url}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
