@@ -21,6 +21,9 @@ import Roteamento from './routes'
 // Context
 import { NotificacaoContextProvider } from './context/NotificacaoContext'
 
+// Store
+import './store'
+
 ReactDOM.render(
   <NotificacaoContextProvider>
     <BrowserRouter>
