@@ -7,8 +7,7 @@ import Widget from '../../components/Widget'
 import TrendsArea from '../../components/TrendsArea'
 import Tweet from '../../components/Tweet'
 import { Modal } from '../../components/Modal'
-
-import ApiConfig from '../../ApiConfig'
+import { TweetsService } from '../../services/TweetsService'
 
 class HomePage extends Component {
   constructor() {
@@ -28,49 +27,27 @@ class HomePage extends Component {
       })
     })
 
-    fetch(`${ApiConfig.url}/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
-    .then(response => response.json())
-    .then((tweets) => {
-      window.store.dispatch({ type: 'CARREGA_TWEETS', tweets })
-    })
+    TweetsService.carrega()
   }
 
   adicionaTweet = (infosDoEvento) => {
     infosDoEvento.preventDefault()
 
     if (this.state.novoTweet.length > 0) {
-      fetch(`${ApiConfig.url}/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ conteudo: this.state.novoTweet })
-      })
-      .then((respostaDoServer) => {
-        return respostaDoServer.json()
-      })
-      .then((tweetVindoDoServidor) => {
+      TweetsService.adiciona(this.state.novoTweet).then(tweetVindoDoServidor => {
         this.setState({
           tweets: [tweetVindoDoServidor, ...this.state.tweets],
           novoTweet: '',
         })
       })
-
     }
   }
 
   removeTweet = (idTweetQueVaiSerRemovido) => {
-    fetch(`${ApiConfig.url}/tweets/${idTweetQueVaiSerRemovido}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
-      method: 'DELETE',
-    })
-    .then(data => data.json())
-    .then(response => {
+    TweetsService.remove(idTweetQueVaiSerRemovido).then(() => {
       const listaDeTweetsAtualizada = this.state.tweets.filter(tweet => tweet._id !== idTweetQueVaiSerRemovido)
       
-      this.setState({
-        tweets: listaDeTweetsAtualizada,
-      })
-
+      this.setState({ tweets: listaDeTweetsAtualizada })
       this.fechaModal()
     })
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './tweet.css'
-import ApiConfig from '../../ApiConfig'
+import { TweetsService } from '../../services/TweetsService'
 
 class Tweet extends Component {
   constructor(props) {
@@ -21,18 +21,15 @@ class Tweet extends Component {
       totalLikes: likeado ? totalLikes - 1 : totalLikes +1,
     })
 
-    fetch(`${ApiConfig.url}/tweets/${idDoTweet}/like?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, { method:'POST' })
-      .then(response => response.json())
-      .then(({ status }) => {
-        const { atualizaTweet, id } = this.props
-        const likeado = status === 201
+    TweetsService.like(idDoTweet).then(({ status }) => {
+      const { atualizaTweet, id } = this.props
+      const likeado = status === 201
 
-        atualizaTweet(id, {
-          likeado,
-          totalLikes: likeado ? totalLikes + 1 : totalLikes - 1,
-        })
+      atualizaTweet(id, {
+        likeado,
+        totalLikes: likeado ? totalLikes + 1 : totalLikes - 1,
       })
-
+    })
   }
 
   handleClickNaAreaDeConteudo = () => this.props.onClickNaAreaDeConteudo && this.props.onClickNaAreaDeConteudo()
