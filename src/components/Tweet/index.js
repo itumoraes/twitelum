@@ -23,7 +23,15 @@ class Tweet extends Component {
 
     fetch(`${ApiConfig.url}/tweets/${idDoTweet}/like?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, { method:'POST' })
       .then(response => response.json())
-      .then(response => console.log(response))
+      .then(({ status }) => {
+        const { atualizaTweet, id } = this.props
+        const likeado = status === 201
+
+        atualizaTweet(id, {
+          likeado,
+          totalLikes: likeado ? totalLikes + 1 : totalLikes - 1,
+        })
+      })
 
   }
 

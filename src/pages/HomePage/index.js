@@ -99,6 +99,16 @@ class HomePage extends Component {
 
   fechaModal = () => this.setState({ tweetAtivoNoModal: {} })
 
+  atualizaTweet = (id, tweetProps) => {
+    this.setState(({ tweets }) => {
+      const index = tweets.findIndex(tweet => tweet._id === id)
+
+      tweets[index] = { ...tweets[index], ...tweetProps }
+
+      return { tweets: [...tweets] }
+    })
+  }
+
   render() {
     return (
       <Fragment>
@@ -164,6 +174,7 @@ class HomePage extends Component {
                     removivel={ this.state.tweetAtivoNoModal.removivel }
                     removeHandler={ () => { this.removeTweet(this.state.tweetAtivoNoModal._id) } }
                     isAbertoNoModal
+                    atualizaTweet={ this.atualizaTweet }
                   />
           }
         </Modal>
