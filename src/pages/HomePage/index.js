@@ -33,7 +33,6 @@ class HomePage extends Component {
       })
     })
 
-    // TweetsService.carrega().then(tweets => store.dispatch({ type: 'CARREGA_TWEETS', tweets }))
     store.dispatch(TweetsThunkActions.carregaTweets())
   }
 
@@ -41,12 +40,10 @@ class HomePage extends Component {
     infosDoEvento.preventDefault()
 
     if (this.state.novoTweet.length > 0) {
-      TweetsService.adiciona(this.state.novoTweet).then(tweetVindoDoServidor => {
-        this.setState({
-          tweets: [tweetVindoDoServidor, ...this.state.tweets],
-          novoTweet: '',
-        })
-      })
+      const conteudoDoTweet = this.state.novoTweet
+
+      this.context.store.dispatch(TweetsThunkActions.addTweet(conteudoDoTweet))
+        .then(() => this.setState({ novoTweet: '' }))
     }
   }
 
