@@ -9,6 +9,7 @@ import TrendsArea from '../../components/TrendsArea'
 import Tweet from '../../components/Tweet'
 import { Modal } from '../../components/Modal'
 import { TweetsService } from '../../services/TweetsService'
+import { TweetsThunkActions } from '../../store/ducks/tweets'
 
 class HomePage extends Component {
   static contextType = ReactReduxContext
@@ -28,11 +29,12 @@ class HomePage extends Component {
 
     store.subscribe(() => {
       this.setState({
-        tweets: store.getState(),
+        tweets: store.getState().tweets.data,
       })
     })
 
-    TweetsService.carrega().then(tweets => store.dispatch({ type: 'CARREGA_TWEETS', tweets }))
+    // TweetsService.carrega().then(tweets => store.dispatch({ type: 'CARREGA_TWEETS', tweets }))
+    store.dispatch(TweetsThunkActions.carregaTweets())
   }
 
   adicionaTweet = (infosDoEvento) => {
