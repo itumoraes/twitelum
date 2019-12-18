@@ -65,6 +65,10 @@ export class TweetsContainer extends Component {
     })
   }
 
+  likeHandler = idDoTweet => {
+    this.context.store.dispatch(TweetsThunkActions.like(idDoTweet))
+  }
+
   render() {
     return (
       <Fragment>
@@ -87,6 +91,7 @@ export class TweetsContainer extends Component {
                     removeHandler={ () => { this.removeTweet(this.state.tweetAtivoNoModal._id) } }
                     isAbertoNoModal
                     atualizaTweet={ this.atualizaTweet }
+                    likeHandler={() => this.likeHandler(this.state.tweetAtivoNoModal._id)}
                   />
           }
         </Modal>
