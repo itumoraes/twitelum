@@ -24,6 +24,16 @@ export const TweetsThunkActions = {
       dispatch({ type: 'tweets/ADD', payload: { tweet: response } })
     }
   },
+  removeTweet: idTweetQueVaiSerRemovido => {
+    return async dispatch => {
+      await TweetsService.remove(idTweetQueVaiSerRemovido)
+
+      dispatch({
+        type: 'tweets/REMOVE',
+        payload: { idDoTweet: idTweetQueVaiSerRemovido },
+      })
+    }
+  }
 }
 
 const INITIAL_STATE = {
@@ -61,6 +71,16 @@ export function tweetsReducer(state = INITIAL_STATE, action = {}) {
     return {
       ...state,
       data: [action.payload.tweet, ...state.data],
+      error: false,
+    }
+  }
+
+  if (action.type === 'tweets/REMOVE') {
+    const listaDeTweetsAtualizada = state.data.filter(tweet => tweet._id !== action.payload.idDoTweet)
+
+    return {
+      ...state,
+      data: listaDeTweetsAtualizada,
       error: false,
     }
   }

@@ -48,12 +48,8 @@ class HomePage extends Component {
   }
 
   removeTweet = (idTweetQueVaiSerRemovido) => {
-    TweetsService.remove(idTweetQueVaiSerRemovido).then(() => {
-      const listaDeTweetsAtualizada = this.state.tweets.filter(tweet => tweet._id !== idTweetQueVaiSerRemovido)
-      
-      this.setState({ tweets: listaDeTweetsAtualizada })
-      this.fechaModal()
-    })
+    this.context.store.dispatch(TweetsThunkActions.removeTweet(idTweetQueVaiSerRemovido))
+      .then(() => this.fechaModal())
   }
 
   mapTweets = () => {
