@@ -33,13 +33,25 @@ export const TweetsThunkActions = {
         payload: { idDoTweet: idTweetQueVaiSerRemovido },
       })
     }
-  }
+  },
+  setTweetAtivo: idDoTweet => {
+    return dispatch => {
+      dispatch({
+        type: 'tweets/SET_TWEET_ATIVO',
+        payload: { idDoTweet },
+      })
+    }
+  },
+  unsetTweetAtivo: () => {
+    return dispatch => dispatch({ type: 'tweets/UNSET_TWEET_ATIVO' })
+  },
 }
 
 const INITIAL_STATE = {
   data: [],
   loading: false,
   error: false,
+  activeDataItem: {},
 }
 
 export function tweetsReducer(state = INITIAL_STATE, action = {}) {
@@ -81,7 +93,25 @@ export function tweetsReducer(state = INITIAL_STATE, action = {}) {
     return {
       ...state,
       data: listaDeTweetsAtualizada,
+      activeDataItem: {},
       error: false,
+    }
+  }
+
+  if (action.type === 'tweets/SET_TWEET_ATIVO') {
+    const idActiveTweet = action.payload.idDoTweet
+    const activeTweet = state.data.find(item => item._id === idActiveTweet)
+
+    return {
+      ...state,
+      activeDataItem: activeTweet,
+    }
+  }
+
+  if (action.type === 'tweets/UNSET_TWEET_ATIVO') {
+    return {
+      ...state,
+      activeDataItem: {},
     }
   }
 
