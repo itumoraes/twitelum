@@ -8,9 +8,6 @@ export const TweetsService = {
   carrega: () => {
     return fetch(`${ApiConfig.url}/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
       .then(response => response.json())
-      .then((tweets) => {
-        window.store.dispatch({ type: 'CARREGA_TWEETS', tweets })
-      })
   },
   adiciona: (novoTweet) => {
     return fetch(`${ApiConfig.url}/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`,

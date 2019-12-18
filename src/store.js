@@ -10,4 +10,4 @@ function tweetReducer(state = [], action = {}) {
 
 const store = createStore(tweetReducer)
 
-window.store = store
+export default store

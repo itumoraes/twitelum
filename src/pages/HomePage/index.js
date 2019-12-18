@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import Helmet from 'react-helmet'
+import { ReactReduxContext } from 'react-redux'
 
 import Cabecalho from '../../components/Cabecalho'
 import Dashboard from '../../components/Dashboard'
@@ -10,6 +11,8 @@ import { Modal } from '../../components/Modal'
 import { TweetsService } from '../../services/TweetsService'
 
 class HomePage extends Component {
+  static contextType = ReactReduxContext
+
   constructor() {
     super()
 
@@ -21,13 +24,15 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    window.store.subscribe(() => {
+    const { store } = this.context
+
+    store.subscribe(() => {
       this.setState({
-        tweets: window.store.getState(),
+        tweets: store.getState(),
       })
     })
 
-    TweetsService.carrega()
+    TweetsService.carrega().then(tweets => store.dispatch({ type: 'CARREGA_TWEETS', tweets }))
   }
 
   adicionaTweet = (infosDoEvento) => {
